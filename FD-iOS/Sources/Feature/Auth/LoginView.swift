@@ -26,15 +26,12 @@ struct LoginView: View {
                         .asObservable()
                         .bind { isNavigate in
                             navigateToHome = isNavigate
-                            keychain.save(type: .userID, value: req.id)
                         }
                         .disposed(by: disposeBag)
                 }
                     .padding(.bottom, 20)
             }
-            .navigationDestination(
-                isPresented: $navigateToHome
-            ) {
+            .fullScreenCover(isPresented: $navigateToHome) {
                 RootTabView()
             }
         }

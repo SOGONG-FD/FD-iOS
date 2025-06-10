@@ -1,11 +1,42 @@
 import SwiftUI
 
 struct DetailBoardView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    @State private var title: String
+    @State private var content: String
+    @State private var createAt: String
+
+    init(
+        title: String,
+        content: String,
+        createAt: String
+    ) {
+        self.title = title
+        self.content = content
+        self.createAt = createAt
     }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Text(title)
+                    .font(.largeTitle)
+                Spacer()
+            }
+            Text(createAt)
+            Divider()
+                .background(Color.fmNeon)
+            ScrollView {
+                Text(content)
+            }
+        }
+        .padding()
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        Spacer()
+    }
+    
 }
 
 #Preview {
-    DetailBoardView()
+    DetailBoardView(title: "fjdsl", content: "Fdjsl", createAt: "fjsdlk")
 }

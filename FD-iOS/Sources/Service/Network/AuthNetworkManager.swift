@@ -9,12 +9,13 @@ import RxCocoa
 class AuthNetworkManager : BaseNetwork<UserAPI> {
     static let shared = AuthNetworkManager(keychain: KeychainImpl())
 
+    let keychain = KeychainImpl()
     func signin(req: AppleSigninRequestParameter) -> Single<Bool> {
         return request(.signin(req: req))
             .filterSuccessfulStatusCodes()
             .map(LoginResponse.self)
             .map { response in
-                JwtStore.shared.accessToken = response.token
+                self.keychain.save(type: .accessToken, value: response.token)
                 return true
             }
             .catch { error in

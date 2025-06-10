@@ -33,7 +33,7 @@ public class JwtStore {
         case .accessToken:
             return [
                 "content-type": "application/json",
-                "Authorization": accessToken
+                "Authorization": "Bearer " + accessToken
             ]
         case .refreshToken:
             return [

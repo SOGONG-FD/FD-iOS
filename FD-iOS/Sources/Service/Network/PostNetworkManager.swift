@@ -10,46 +10,39 @@ import RxCocoa
 class PostNetworkManager : BaseNetwork<PostAPI> {
     static let shared = PostNetworkManager(keychain: KeychainImpl())
 
-    func createPost(req: CreatePostParams) -> Completable {
+    func createPost(req: CreatePostParams) -> Single<PostCreateSuccessResponse> {
         return request(.createPost(req: req))
             .filterSuccessfulStatusCodes()
-            .asCompletable()
+            .map(PostCreateSuccessResponse.self)
+            .map { return $0 }
             .catch { error in
                 print(error.localizedDescription)
                 return .never()
             }
     }
 
-    func getPost() -> Single<Bool> {
+    func getPost() -> Single<[PostResponseElement]> {
         return request(.getPost)
             .filterSuccessfulStatusCodes()
+            .map(AllPostResponse.self)
             .map {
-                switch $0.statusCode {
-                case 200...299:
-                    return true
-                default:
-                    return false
-                }
+                return $0.posts
             }
             .catch { error in
                 print(error.localizedDescription)
-                return .just(false)
+                return .never()
             }
     }
-    func getDetailPost(id: String) -> Single<Bool> {
+    func getDetailPost(id: String) -> Single<PostResponseElement> {
         return request(.getDetailPost(id: id))
             .filterSuccessfulStatusCodes()
+            .map(PostResponse.self)
             .map {
-                switch $0.statusCode {
-                case 200...299:
-                    return true
-                default:
-                    return false
-                }
+                return $0.post
             }
             .catch { error in
                 print(error.localizedDescription)
-                return .just(false)
+                return .never()
             }
     }
     func deletePost(id: String) -> Single<Bool> {

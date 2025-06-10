@@ -10,7 +10,7 @@ struct MyPageView: View {
     @State private var promptHistory: [PromptHistoryResponseElement]?
 
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             VStack {
                 Text("조영준")
                     .font(.title2)
@@ -28,7 +28,7 @@ struct MyPageView: View {
             .padding(.top, 32)
             .navigationTitle("마이페이지")
             .navigationBarTitleDisplayMode(.inline)
-        }
+//        }
     }
 }
 

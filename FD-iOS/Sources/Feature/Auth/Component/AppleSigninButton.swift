@@ -3,6 +3,7 @@ import AuthenticationServices
 
 struct AppleSigninButton : View {
     private var action: (AppleSigninRequestParameter) -> Void
+    private let keychain = KeychainImpl()
     @State private var requestData: AppleSigninRequestParameter = .init(id: "", email: "", name: "")
 
     public init(
@@ -27,16 +28,30 @@ struct AppleSigninButton : View {
                         let name = (fullName?.familyName ?? "") + (fullName?.givenName ?? "")
                         print("name: \(name)")
                         let email = appleIDCredential.email
-                        print("email: \(email ?? "fasd")")
+                        print("email: \(email ?? "")")
                         let IdentityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
                         print("token: \(IdentityToken ?? "")")
                         let AuthorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8)
                         print("code: \(AuthorizationCode ?? "")")
 
                         DispatchQueue.main.async {
-                            requestData.id = IdentityToken ?? ""
-                            requestData.email = "cyj070513@gmail.com"
-                            requestData.name = "조영준"
+                            requestData.id = "ForTest"
+                            keychain.save(type: .userID, value: "ForTest")
+
+                            if requestData.email == "" {
+                                requestData.email = keychain.load(type: .email)
+                            } else {
+                                requestData.email = email ?? ""
+                                keychain.save(type: .email, value: email ?? "")
+                            }
+
+                            if requestData.name == "" {
+                                requestData.name = keychain.load(type: .name)
+                            } else {
+                                requestData.name = name
+                                keychain.save(type: .name, value: name)
+                            }
+
                             action(requestData)
                         }
                     default:
@@ -44,7 +59,7 @@ struct AppleSigninButton : View {
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
-                    print("error")
+                    print("Login Failed")
                 }
             }
         )

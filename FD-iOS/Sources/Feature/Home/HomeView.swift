@@ -24,11 +24,19 @@ struct HomeView: View {
                             )
                             PromptView(
                                 promptText: data.botMessage,
-                                type: .bot
+                                type: .bot,
+                                title: data.userMessage,
+                                content: data.botMessage
                             )
                         }
-                    PromptView(promptText: promptText, type: .user)
-                    PromptView(promptText: promptResponse, type: .bot)
+                    PromptView(
+                        promptText: promptText,
+                        type: .user
+                    )
+                    PromptView(
+                        promptText: promptResponse,
+                        type: .bot
+                    )
                     Color.clear
                         .frame(height: 1)
                         .id("bottom")
@@ -38,14 +46,12 @@ struct HomeView: View {
             .onAppear {
                 getPromptHistory()
             }
-            .onChange(of: promptHistory) { _ in
+            .onChange(of: promptHistory) { _, _ in
                 proxy.scrollTo("bottom", anchor: .bottom)
             }
             HomeTextField { text in
                 getPromptHistory()
                 promptText = text
-//                keychain.save(type: .userID, value: "test")
-
                 PromptNetworkManager.shared.sendChat(
                     id: keychain.load(type: .userID),
                     message: text

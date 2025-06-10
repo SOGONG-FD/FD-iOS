@@ -14,6 +14,8 @@ public enum KeychainType: String {
     case tokenIsEmpty
 
     case userID
+    case email
+    case name
 }
 
 public struct KeychainImpl: Keychain {

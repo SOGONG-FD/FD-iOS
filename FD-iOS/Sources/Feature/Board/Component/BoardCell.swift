@@ -1,18 +1,21 @@
 import SwiftUI
 
 struct BoardCell: View {
-    @Binding var title: String
-    @Binding var date: String
-    @Binding var content: String
+    let title: String
+    let date: String
+    let content: String
+    let createAt: String
 
     init(
-        title: Binding<String>,
-        date: Binding<String>,
-        content: Binding<String>
+        title:String,
+        date:String,
+        content: String,
+        createAt: String
     ) {
-        self._title = title
-        self._date = date
-        self._content = content
+        self.title = title
+        self.date = date
+        self.content = content
+        self.createAt = createAt
     }
 
     var body: some View {
@@ -31,7 +34,11 @@ struct BoardCell: View {
                     .frame(height: 30)
                 Spacer()
                 NavigationLink {
-                    DetailBoardView()
+                    DetailBoardView(
+                        title: title,
+                        content: content,
+                        createAt: createAt
+                    )
                 } label: {
                     Text("상세보기")
                         .foregroundStyle(.black)

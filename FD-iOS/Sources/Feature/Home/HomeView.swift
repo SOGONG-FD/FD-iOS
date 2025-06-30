@@ -35,7 +35,9 @@ struct HomeView: View {
                     )
                     PromptView(
                         promptText: promptResponse,
-                        type: .bot
+                        type: .bot,
+                        title: promptText,
+                        content: promptResponse
                     )
                     Color.clear
                         .frame(height: 1)
@@ -53,7 +55,7 @@ struct HomeView: View {
                 getPromptHistory()
                 promptText = text
                 PromptNetworkManager.shared.sendChat(
-                    id: keychain.load(type: .userID),
+                    id: "박",
                     message: text
                 )
                 .asObservable()
@@ -69,7 +71,7 @@ struct HomeView: View {
 
     func getPromptHistory() {
         PromptNetworkManager.shared.history(
-            id: keychain.load(type: .userID)
+            id: "박"
         )
         .asObservable()
         .bind { response in
